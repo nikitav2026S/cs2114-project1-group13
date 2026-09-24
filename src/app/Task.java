@@ -43,7 +43,12 @@ public class Task {
      * Returns false if the index is out of range or the new title is blank.
      */
     
-    public boolean editTask(int index, String newTitle) {
+    public boolean editTask(int index, String newTitle) 
+    {
+        if(newTitle == null || newTitle.trim().isEmpty())
+        {
+            return false;
+        }
         if(index < 0 || index >= toDoTasks.size()) {
             return false;
             

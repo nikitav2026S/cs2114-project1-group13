@@ -38,34 +38,30 @@ public class Main {
 
             if (action == 1) {
                 handleAddTask();
-                break;
             }
-            if (action == 2) {
+            else if (action == 2) {
                 handleEditTask();
-                break;
             }
-            if (action == 3) {
+            else if (action == 3) {
                 handleCompleteTask();
-                break;
             }
-            if (action == 4) {
+            else if (action == 4) {
                 handleRemoveTask();
-                break;
             }
-            if (action == 5) {
+            else if (action == 5) {
                 displayTasks();
-                break;
             }
-            if (action == 6) {
+            else if (action == 6) {
                 displayStatus();
-                break;
             }
-            if (action == 0) {
+            else if (action == 0) {
                 run = false;
                 System.out.println("Have fun getting your tasks done!");
-                break;
             }
-            System.out.println("Please enter a number between 0 and 6.");
+            else 
+            {
+                System.out.println("Please enter a number between 0 and 6.");
+            }
         }
 
         scanner.close();

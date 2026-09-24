@@ -18,7 +18,7 @@ public class Points {
         lastCompletionDate = null;
     }
 
-    public void earnPoints() {
+    public void awardPoints() {
         earnPoints(1);
     }
 
