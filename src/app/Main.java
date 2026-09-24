@@ -2,15 +2,7 @@ package arraybag;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Entry point and user-interaction layer for the to-do list app.
- * Main owns the Scanner, holds one Task and one Points object, and
- * translates menu choices into calls on those two classes. It does not
- * store any task or point data itself — that all lives in Task/Points.
- */
 public class Main {
-
-    private static final int MAX_TITLE_LENGTH = 100; // TODO: confirm the real limit for the spec sheet
 
     private Scanner scanner;
     private Task task;
@@ -22,11 +14,13 @@ public class Main {
         points = new Points();
     }
 
+
     public static void main(String[] args) {
         new Main().run();
     }
 
-    /** Runs the menu loop until the user chooses to quit. */
+
+
     public void run() {
         printInstructions();
         boolean run = true;
@@ -44,132 +38,120 @@ public class Main {
                 break;
             }
             if (action == 3) {
-                handleAddTask();
+                handleCompleteTask();
                 break;
             }
             if (action == 4) {
-                handleAddTask();
+                handleRemoveTask();
                 break;
             }
             if (action == 5) {
-                handleAddTask();
+                displayTasks();
                 break;
             }
             if (action == 6) {
-                handleAddTask();
+                displayStatus();
                 break;
             }
             if (action == 0) {
-                handleAddTask();
+                run = false;
+                System.out.println("Have fun getting your tasks done!");
                 break;
             }
-                 
-                   
-                case 3:
-                    handleCompleteTask();
-                    break;
-                case 4:
-                    handleRemoveTask();
-                    break;
-                case 5:
-                    displayTasks();
-                    break;
-                case 6:
-                    displayStatus();
-                    break;
-                case 0:
-                    run = false;
-                    System.out.println("Go get your tasks done!");
-                    break;
-                default:
-                    System.out.println("Please enter a number between 0 and 6.");
-            
+            System.out.println("Please enter a number between 0 and 6.");
         }
 
         scanner.close();
     }
 
-    // ----- Display -----
+
 
     private void printInstructions() {
-        System.out.println("=== To-Do List ===");
+        System.out.println("=== How to Use To-Do List ===");
         System.out.println("Add tasks, complete them, and build a daily streak.");
-        System.out.println("Choose a menu option by typing its number.");
+        System.out.println("Choose an action by typing its number.");
         System.out.println();
     }
+
 
     private void printMenu() {
         System.out.println();
-        System.out.println("1. Add task");
-        System.out.println("2. Edit task");
-        System.out.println("3. Complete task");
-        System.out.println("4. Remove task");
-        System.out.println("5. View tasks");
-        System.out.println("6. View points and streak");
-        System.out.println("0. Quit");
+        System.out.println("1. Add a task");
+        System.out.println("2. Edit a task");
+        System.out.println("3. Complete a task");
+        System.out.println("4. Remove a task");
+        System.out.println("5. View your tasks");
+        System.out.println("6. View your points and streak");
+        System.out.println("0. Exit to-do list");
     }
+
 
     private void displayStatus() {
         System.out.println();
         System.out.println("Points: " + points.getTotalPoints());
-        System.out.println("Current streak: " + points.getCurrentStreak() + " day(s)");
-        System.out.println("Longest streak: " + points.getLongestStreak() + " day(s)");
+        System.out.println("Current streak: " + points.getCurrentStreak()
+            + " day(s)");
+        System.out.println("Longest streak: " + points.getLongestStreak()
+            + " day(s)");
         if (!points.isStreakSafe()) {
-            System.out.println("Your streak is in jeopardy — complete a task today!");
+            System.out.println( "Your streak is about to end, complete a task to keep it going!");
         }
     }
 
-    private void displayTasks() {
-        ArrayList<String> toDo = task.getToDoTasks();
-        ArrayList<String> completed = task.getCompletedTasks();
 
+    private void displayTasks() {
+        ArrayList<String> todo = task.getToDoTasks();
+        ArrayList<String> completed = task.getCompletedTasks();
         System.out.println();
         System.out.println("To-Do:");
-        if (toDo.isEmpty()) {
-            System.out.println("  (nothing yet)");
-        } else {
-            for (int i = 0; i < toDo.size(); i++) {
-                System.out.println("  " + (i + 1) + ". " + toDo.get(i));
+        if (todo.isEmpty()) {
+            System.out.println("Nothing yet, you are all caught up!");
+        }
+        else {
+            for (int i = 0; i < todo.size(); i++) {
+                System.out.println("  " + (i + 1) + ". " + todo.get(i));
             }
         }
 
         System.out.println("Completed:");
         if (completed.isEmpty()) {
-            System.out.println("  (nothing yet)");
-        } else {
+            System.out.println("Nothing so far, you need to lock in!");
+        }
+        else {
             for (String title : completed) {
                 System.out.println("  " + strikethrough(title));
             }
         }
     }
 
-    /** Renders text with a strikethrough effect for completed tasks. */
+  
     private String strikethrough(String text) {
-        StringBuilder sb = new StringBuilder();
-        for (char c : text.toCharArray()) {
-            sb.append(c).append('\u0336');
+        String result = "";
+        for (int i = 0; i < text.length(); i++) {
+            result += text.charAt(i);
+            result += '\u0336';
         }
-        return sb.toString();
+        return result;
     }
 
-    // ----- Handlers -----
 
     private void handleAddTask() {
-        System.out.print("Enter task: ");
+        System.out.print("Enter the task title: ");
         String title = scanner.nextLine();
 
         if (title.trim().isEmpty()) {
             System.out.println("Task can't be blank.");
             return;
         }
-        if (title.length() > MAX_TITLE_LENGTH) {
-            System.out.println("Task is too long (max " + MAX_TITLE_LENGTH + " characters).");
+        if (title.length() > 100) {
+            System.out.println("Your task title is too long (max  100 characters).");
             return;
         }
 
         task.addTask(title.trim());
         System.out.println("Added: " + title.trim());
     }
+
 
     private void handleEditTask() {
         if (task.isEmpty()) {
@@ -178,23 +160,25 @@ public class Main {
         }
 
         displayTasks();
-        int index = readTaskIndex("Which task would you like to edit? ", task.getToDoCount());
+        int index = readTaskIndex("Which task would you like to edit? ", task
+            .getToDoCount());
 
-        System.out.print("Enter the new text: ");
+        System.out.print("Enter the new title: ");
         String newTitle = scanner.nextLine();
 
         if (newTitle.trim().isEmpty()) {
-            System.out.println("Task can't be blank.");
+            System.out.println("The task title can't be blank.");
             return;
         }
-        if (newTitle.length() > MAX_TITLE_LENGTH) {
-            System.out.println("Task is too long (max " + MAX_TITLE_LENGTH + " characters).");
+        if (newTitle.length() > 100) {
+            System.out.println("The task title is too long (max 100 characters).");
             return;
         }
 
         task.editTask(index, newTitle.trim());
-        System.out.println("Task updated.");
+        System.out.println("The task has been updated.");
     }
+
 
     private void handleRemoveTask() {
         if (task.isEmpty()) {
@@ -203,10 +187,12 @@ public class Main {
         }
 
         displayTasks();
-        int index = readTaskIndex("Which task would you like to remove? ", task.getToDoCount());
+        int index = readTaskIndex("Which task would you like to remove? ", task
+            .getToDoCount());
         String removed = task.removeTask(index);
         System.out.println("Removed: " + removed);
     }
+
 
     private void handleCompleteTask() {
         if (task.isEmpty()) {
@@ -215,39 +201,40 @@ public class Main {
         }
 
         displayTasks();
-        int index = readTaskIndex("Which task would you like to complete? ", task.getToDoCount());
-        String completedTitle = task.completeTask(index);
+        int index = readTaskIndex("Which task would you like to complete? ",
+            task.getToDoCount());
+        String titleCompleted = task.completeTask(index);
 
         points.awardPoints();
         points.recordCompletionToday();
 
-        System.out.println("Good job! Completed: " + completedTitle);
-        System.out.println("Points: " + points.getTotalPoints() + " | Streak: " + points.getCurrentStreak());
+        System.out.println("Good job completing " + titleCompleted + "!");
+        System.out.println("Points: " + points.getTotalPoints());
+        System.out.println("Streak: " + points.getCurrentStreak());
     }
 
-    // ----- Input helpers -----
 
-    /** Re-prompts until the user types a whole number. */
     private int userInt(String prompt) {
         while (true) {
             System.out.print(prompt);
             String line = scanner.nextLine();
             try {
                 return Integer.parseInt(line.trim());
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e) {
                 System.out.println("Please enter a whole number.");
             }
         }
     }
 
-    /** Re-prompts until the user picks a valid 1-based task number, then returns it 0-based. */
-    private int readTaskIndex(String prompt, int listSize) {
+    private int readTaskIndex(String prompt, int listsize) {
         while (true) {
-            int oneBased = readInt(prompt);
-            if (oneBased >= 1 && oneBased <= listSize) {
-                return oneBased - 1;
+            int num = userInt(prompt);
+            if (num >= 1 && num <= listsize) {
+                return num - 1;
             }
-            System.out.println("Please enter a number between 1 and " + listSize + ".");
+            System.out.println("Please enter a number between 1 and " + listsize
+                + ".");
         }
     }
 }
