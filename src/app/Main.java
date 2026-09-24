@@ -2,6 +2,13 @@ package app;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// -------------------------------------------------------------------------
+/**
+ * Creates the Menu Loop for users to interact with.
+ * 
+ *  @author ayaan
+ *  @version Sep 23, 2026
+ */
 public class Main {
 
     private Scanner scanner;
